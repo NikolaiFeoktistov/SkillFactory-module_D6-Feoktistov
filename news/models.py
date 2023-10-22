@@ -67,7 +67,7 @@ class Post(models.Model):
         return self.get_categoryType_display()
 
     def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
-        return reverse('newapp:new_detail', args=(self.pk,))
+        return reverse('news:new_detail', args=(self.pk,))
 
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)

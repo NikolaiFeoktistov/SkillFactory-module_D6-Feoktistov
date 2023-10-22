@@ -1,9 +1,10 @@
+
 {% load custom_filters %}
 
 {% if news %}
 {% for new in news %}
 
-{% include '/news/parts/details.html' %}
+{% include 'news/parts/details.html' %}
 <p>
     {{ new.text|censor }}
 </p>

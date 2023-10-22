@@ -68,14 +68,12 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'news/new_create.html'
     form_class = PostForm
     context_object_name = 'news'
+    permission_required = ('news.add_post', 'news.view_post',)
 
     def form_valid(self, form):
-        author_name = form.cleaned_data['author']
-
-        author, created = Author.objects.get_or_create(name=author_name)
-
-        form.instance.author = author
-
+        post = form.save(commit=False)
+        post.user = self.request.user
+        post.save()
         return super().form_valid(form)
 
     # дженерик для редактирования объекта
@@ -93,7 +91,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 class PostDeleteView(DeleteView):
     template_name = 'news/new_delete.html'
     queryset = Post.objects.all()
-    success_url = reverse_lazy('newapp:news')
+    success_url = reverse_lazy('news:news')
     context_object_name = 'news'
 
 class PostCategoryView(ListView):

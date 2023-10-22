@@ -17,16 +17,16 @@ class PostForm(ModelForm):
           'title' : forms.TextInput(attrs={
             'class': 'form-control',
           }),
-          'category' : forms.Select(attrs={
+          'category' : forms.SelectMultiple (attrs={
             'class': 'form-control',
           }),
           'text' : forms.Textarea(attrs={
             'class': 'form-control',
           }),
         }
-        labels={
-            'author':'Автор',
-            'title':'Заголовок',
-            'categoryType':'Категория',
-            'text':'Текст',
+        labels = {
+            'author': 'Автор',
+            'title': 'Заголовок',
+            'category': 'Категория',
+            'text': 'Текст',
         }

@@ -1,7 +1,7 @@
 {% extends 'layout/base.html' %}
 
 {% block title %}
-News
+{{ category  }} News
 {% endblock title %}
 
 {% block content %}
@@ -9,16 +9,22 @@ News
 {% if category.id %}
 <div class="subscribed">
   <em>
-    Подписаться на
-    <strong> {{ category }}?</strong>
-  </em>
-  <a href="{% url 'news:subscribed' category.id %}" class="button button-outline">
+    Подписаться на категорию <strong> {{ category }}?</strong>
+   </em>
+  <a href="{% url 'news:subscribe' category.id %}" class="btn btn-outline-primary">
     Подписаться
   </a>
+ </div>
+{% else %}
+<div>
+    <em>
+        Отписаться от категории  <strong> {{ category }}? </strong>
+            </em>
+<a href = "{% url 'news:unsubscribe' category.id %}" class="btn btn-outline-primary" >
+    Отписаться!</a>
 </div>
-
 {% endif %}
 
-{% include 'news/parts/posts.html' %}
+<!-- {% include 'news/parts/posts.html' %} -->
 
 {% endblock content %}
