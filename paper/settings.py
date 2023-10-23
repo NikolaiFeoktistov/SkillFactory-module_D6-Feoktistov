@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'sign',
     'protect',
 
+    'django_apscheduler',
+
 ]
 
 MIDDLEWARE = [
@@ -149,7 +151,7 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_HOST_USER = 'kolafeoktistovv'
 EMAIL_HOST_PASSWORD = 'Kolyan123q'
-DEFAULT_FROM_EMAIL = 'kolafeoktistovv@yandex.ru '
+DEFAULT_FROM_EMAIL = 'kolafeoktistovv@yandex.ru'
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
@@ -169,3 +171,70 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ACCOUNT_FORMS = {'signup': 'sign.forms.BasicSignupForm'}
+
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+
+ADMINS = [('kolafeoktistovv', 'kolafeoktistovv@yandex.ru')]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'errors_format': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'errors_log_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'formatter': 'errors_format',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'errors_format',
+        },
+        'general_log_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'errors_format',
+        },
+        'console_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'errors_format',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['errors_log_file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['errors_log_file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
+
+if DEBUG:
+    # Если DEBUG = True, настройка логирования для консоли
+    LOGGING['loggers']['django.request']['handlers'].append('console_debug')
+    LOGGING['loggers']['django.server']['handlers'].append('console_debug')
+else:
+    # Если DEBUG = False, настройка логирования для обработчиков файлов и отправки почты
+    LOGGING['loggers']['django.request']['handlers'].remove('console_debug')
+    LOGGING['loggers']['django.server']['handlers'].remove('console_debug')
+
+
+

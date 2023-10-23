@@ -17,6 +17,9 @@ from django.core.paginator import Paginator # Импортируем класс,
 from .filters import PostFilter # импортируем недавно написанный фильтр
 from .forms import PostForm # импортируем нашу форму
 
+
+
+
 DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
 
 class PostList(ListView):
@@ -161,3 +164,33 @@ def CategoryDetailView(request, pk):
                   'is_subscribed' : is_subscribed,
                   'subscribers': category.subscribers.all()
                   })
+
+
+
+def get_subscribers(category):
+    user_email =[]
+    for user in category.subscribers.all():
+        user_email.append(user.email)
+    return user_email
+
+def new_post_subscriptions(instance):
+    template = 'mail/new_post.html'
+
+    for category in instance.category.all():
+        email_subject = f'Новая публикация в категории "{category}"'
+        user_emails = get_subscribers(category)
+        html = render_to_string(
+            template_name=template,
+            context={
+              'category': category,
+                'post': instance,
+            }
+        )
+        msg = EmailMultiAlternatives(
+            subject=email_subject,
+            body='',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=user_emails,
+        )
+        msg.attach_alternative(html, 'text/html')
+        msg.send()

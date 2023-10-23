@@ -93,3 +93,11 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category)  # Подписанные категории
+    last_notification_sent = models.DateTimeField()  # Дата последней отправки уведомления
+
+    def __str__(self):
+        return f"Subscription for {self.user.username}"
